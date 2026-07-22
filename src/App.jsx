@@ -385,15 +385,20 @@ function TraitModal({ options, onResult, onClose }) {
               {activeTrait ? activeTrait.label : "Choose a Trait"}
             </h2>
             {activeTrait && (
-              <button
-                type="button"
-                onClick={() => selectResult(Math.floor(Math.random() * entries.length))}
-                aria-label={`Roll randomly on the ${activeTrait.label} table`}
-                title="Roll randomly"
-                className="inline-flex items-center justify-center border border-amber-400/60 bg-amber-400/10 p-2 text-amber-300 transition hover:border-amber-300 hover:bg-amber-400/20 hover:text-amber-200"
-              >
-                <D20Icon />
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => selectResult(Math.floor(Math.random() * entries.length))}
+                  aria-label={`Roll randomly on the ${activeTrait.label} table`}
+                  title="Roll randomly"
+                  className="inline-flex items-center justify-center border border-amber-400/60 bg-amber-400/10 p-2 text-amber-300 transition hover:border-amber-300 hover:bg-amber-400/20 hover:text-amber-200"
+                >
+                  <D20Icon />
+                </button>
+                <span className="text-xs uppercase tracking-wide text-stone-300/40">
+                  Roll a random trait
+                </span>
+              </div>
             )}
           </div>
           {activeTrait && (
@@ -498,16 +503,21 @@ export default function App() {
   const linkOptions = [
     {
       id: "facilitator-playlist",
-      label: "Spotify Playlist for Facilitator Prep",
+      label: "Spotify - for Facilitator Prep",
       href: "https://open.spotify.com/playlist/4f3s6cgJq1XBTIx5SPCg0A",
     },
     {
       id: "session-playlist",
-      label: "Spotify Playlist for Session",
+      label: "Spotify - for the Session",
       href: "https://open.spotify.com/playlist/4f3s6cgJq1XBTIx5SPCg0A",
     },
-    { id: "itch", label: "Itch", href: "https://codabool.itch.io" },
-    { id: "artist", label: "Artist link", href: "https://lemos.itch.io" },
+    { id: "itch", label: "Oubliette", href: "https://codabool.itch.io" },
+    {
+      id: "relationships-by-eddie-dover",
+      label: "Relationship Rolltable by Eddie Dover",
+      href: "https://github.com/EddieDover/mothership-crew-relationships",
+    },
+    { id: "artist", label: "Portraits were by Francisco Lemos", href: "https://lemos.itch.io" },
   ]
 
   return (
@@ -632,4 +642,3 @@ function ResultBlock({ children, muted = false, className = "" }) {
     </div>
   )
 }
-
