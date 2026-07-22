@@ -25,7 +25,7 @@ const RELATIONSHIPS = {
       9: "They have a pact to get back somewhere together, no matter what.",
     },
     2: {
-      0: "They served together in the same unit or corporation.",
+      0: "They worked together at the same company.",
       1: "One is a mentor to the other.",
       2: "They cover for the other's mistakes.",
       3: "One got the job the other wanted.",
@@ -75,7 +75,7 @@ const RELATIONSHIPS = {
     6: {
       0: "They have never really talked much, but are now stuck together.",
       1: "There is mutual indifference toward them.",
-      2: "They run in different social circles, even on this ship.",
+      2: "They run in different social circles.",
       3: "They know of each other, but that's it.",
       4: "One is actively avoiding the other.",
       5: "Something unspoken makes them awkward around each other.",
@@ -90,7 +90,7 @@ const RELATIONSHIPS = {
       2: "One saved the other from a horrific monster.",
       3: "They survived the same medical experiment.",
       4: "They share the memory of friend's death.",
-      5: "They were both part of a failed mission with a high body count.",
+      5: "They were both part of a failed expedition with a high body count.",
       6: "They are bonded by a terrifying encounter from their past.",
       7: "They both suffer from a recurring nightmare from a shared event.",
       8: "One knows the other's most shameful secret.",
@@ -385,20 +385,15 @@ function TraitModal({ options, onResult, onClose }) {
               {activeTrait ? activeTrait.label : "Choose a Trait"}
             </h2>
             {activeTrait && (
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => selectResult(Math.floor(Math.random() * entries.length))}
-                  aria-label={`Roll randomly on the ${activeTrait.label} table`}
-                  title="Roll randomly"
-                  className="inline-flex items-center justify-center border border-amber-400/60 bg-amber-400/10 p-2 text-amber-300 transition hover:border-amber-300 hover:bg-amber-400/20 hover:text-amber-200"
-                >
-                  <D20Icon />
-                </button>
-                <span className="text-xs uppercase tracking-wide text-stone-300/40">
-                  Roll a random trait
-                </span>
-              </div>
+              <button
+                type="button"
+                onClick={() => selectResult(Math.floor(Math.random() * entries.length))}
+                aria-label={`Roll randomly on the ${activeTrait.label} table`}
+                title="Roll randomly"
+                className="inline-flex items-center justify-center border border-amber-400/60 bg-amber-400/10 p-2 text-amber-300 transition hover:border-amber-300 hover:bg-amber-400/20 hover:text-amber-200"
+              >
+                <D20Icon />
+              </button>
             )}
           </div>
           {activeTrait && (
@@ -503,21 +498,16 @@ export default function App() {
   const linkOptions = [
     {
       id: "facilitator-playlist",
-      label: "Spotify - for Facilitator Prep",
+      label: "Spotify Playlist for Facilitator Prep",
       href: "https://open.spotify.com/playlist/4f3s6cgJq1XBTIx5SPCg0A",
     },
     {
       id: "session-playlist",
-      label: "Spotify - for the Session",
+      label: "Spotify Playlist for Session",
       href: "https://open.spotify.com/playlist/4f3s6cgJq1XBTIx5SPCg0A",
     },
-    { id: "itch", label: "Oubliette", href: "https://codabool.itch.io" },
-    {
-      id: "relationships-by-eddie-dover",
-      label: "Relationship Rolltable by Eddie Dover",
-      href: "https://github.com/EddieDover/mothership-crew-relationships",
-    },
-    { id: "artist", label: "Portraits were by Francisco Lemos", href: "https://lemos.itch.io" },
+    { id: "itch", label: "Itch", href: "https://codabool.itch.io" },
+    { id: "artist", label: "Artist link", href: "https://lemos.itch.io" },
   ]
 
   return (
