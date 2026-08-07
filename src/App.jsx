@@ -593,7 +593,7 @@ export default function App() {
         <SelectionModal
           title="Have your player roll d8 for a category, then select the corresponding item below"
           options={relationshipOptions}
-          subtitle="Everyone should have at least 1 relation (either from someone else's roll or from their own). If desired, have some players roll an extra, but don't overwhelm your players. Allow for rerolls."
+          subtitles="1.) Have everyone intro their roles and roll a d8. 2.) Come back around and one at a time tell them the rolled category (allow rerolls). 3.) Ask them to select someone at the table to have this relation with. 4.) Read the description after clicking the category. 5.) Ask them to fill in any blanks."
           onSelect={handleSelectRelationship}
           onClose={() => setActiveModal(null)}
         />
