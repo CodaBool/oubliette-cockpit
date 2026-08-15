@@ -655,12 +655,12 @@ export default function App() {
                   <p className="text-[0.7rem] font-black uppercase tracking-[0.18em] text-amber-300/80">
                     {relationshipResult.value.category}
                   </p>
-                  <p className="mt-2 text-sm font-bold leading-6 text-stone-100 md:text-base">
+                  <p className="mt-2 text-sm font-bold leading-6 text-stone-100 md:text-base lg:text-xl lg:leading-8">
                     {relationshipResult.value.text}
                   </p>
                 </div>
               ) : (
-                <p className="text-sm text-stone-500">Awaiting selection...</p>
+                <p className="text-sm text-stone-500 lg:text-lg">Awaiting selection...</p>
               )}
             </FadeText>
           </ResultBlock>
@@ -682,12 +682,12 @@ export default function App() {
                   <p className="text-[0.7rem] font-black uppercase tracking-[0.18em] text-amber-300/80">
                     {traitsResult.value.category}
                   </p>
-                  <p className="mt-2 text-sm font-bold leading-6 text-stone-100 md:text-base">
+                  <p className="mt-2 text-sm font-bold leading-6 text-stone-100 md:text-base lg:text-xl lg:leading-8">
                     {traitsResult.value.text}
                   </p>
                 </div>
               ) : (
-                <p className="text-sm text-stone-500">Awaiting selection...</p>
+                <p className="text-sm text-stone-500 lg:text-lg">Awaiting selection...</p>
               )}
             </FadeText>
           </ResultBlock>
@@ -706,15 +706,12 @@ export default function App() {
             <FadeText show={crimeResult.visible}>
               {crimeResult.hasValue ? (
                 <div className="w-full">
-                  <p className="text-[0.7rem] font-black uppercase tracking-[0.18em] text-amber-300/80">
-                    {crimeResult.value.category}
-                  </p>
-                  <p className="mt-2 text-sm font-bold leading-6 text-stone-100 md:text-base">
+                  <p className="mt-2 text-sm font-bold leading-6 text-stone-100 md:text-base lg:text-xl lg:leading-8">
                     {crimeResult.value.text}
                   </p>
                 </div>
               ) : (
-                <p className="text-sm text-stone-500">Awaiting selection...</p>
+                <p className="text-sm text-stone-500 lg:text-lg">Awaiting selection...</p>
               )}
             </FadeText>
           </ResultBlock>
@@ -733,15 +730,12 @@ export default function App() {
             <FadeText show={illnessResult.visible}>
               {illnessResult.hasValue ? (
                 <div className="w-full">
-                  <p className="text-[0.7rem] font-black uppercase tracking-[0.18em] text-amber-300/80">
-                    {illnessResult.value.category}
-                  </p>
-                  <p className="mt-2 text-xs font-bold leading-6 text-stone-100 sm:text-sm md:text-base">
+                  <p className="mt-2 text-xs font-bold leading-6 text-stone-100 sm:text-sm md:text-base lg:text-xl lg:leading-8">
                     {illnessResult.value.text}
                   </p>
                 </div>
               ) : (
-                <p className="text-sm text-stone-500">Awaiting selection...</p>
+                <p className="text-sm text-stone-500 lg:text-lg">Awaiting selection...</p>
               )}
             </FadeText>
           </ResultBlock>
