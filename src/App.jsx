@@ -209,6 +209,51 @@ const SIMPLE_TRAITS = {
   ],
 }
 
+const CRIME_TABLE = [
+  { label: "metaphysical fraud" },
+  { label: "theft" },
+  { label: "stalking" },
+  { label: "blackmail" },
+  { label: "vigilantism" },
+  {
+    label: "phrogging",
+    description: "secretly squatting in an occupied residence",
+  },
+  { label: "cannibalism" },
+  { label: "arson" },
+  { label: "bio harvesting" },
+  { label: "restricted chemicals" },
+]
+
+const ILLNESS_TABLE = [
+  { label: "PTSD", description: "Persistent trauma responses from past events." },
+  { label: "Egomania", description: "Delusions of grandeur, events are proof they are uniquely important." },
+  { label: "Obsessive", description: "A goal is slowly consuming every part of their identity." },
+  { label: "Hieromania", description: "They receive religious signs, visions, and commandments." },
+  { label: "Compulsive", description: "They must repeat a particular action to feel safe." },
+  {
+    label: "Excoriation",
+    description: "non-stop skin picking.",
+  },
+  {
+    label: "Stendhal Syndrome",
+    description: "Hallucinations triggered by exposure to intense works of art.",
+  },
+  {
+    label: "Antisocial",
+    description: "Persistent disregard for others' rights and boundaries.",
+  },
+  {
+    label: "Capgras syndrome",
+    description:
+      "The conviction that a close family member, friend, or spouse has been replaced by an identical imposter.",
+  },
+  {
+    label: "Depersonalized",
+    description: "Feeling perpetually detached from one's own physical body.",
+  },
+]
+
 function cx(...classes) {
   return classes.filter(Boolean).join(" ")
 }
@@ -270,10 +315,17 @@ function SelectionModal({
         className="flex max-h-[90dvh] w-full max-w-lg flex-col border border-stone-800 bg-stone-950 p-6 shadow-2xl"
         onMouseDown={e => e.stopPropagation()}
       >
-        <div className="border-b border-stone-800 pb-2 mb-2">
+        <div className="mb-3 flex items-center justify-between border-b border-stone-800 pb-3">
           <h2 className="text-md font-black uppercase tracking-widest text-stone-100">
             {title}
           </h2>
+          <button
+            type="button"
+            onClick={onClose}
+            className="border border-stone-700 bg-stone-900 px-4 py-2 text-xs font-black uppercase tracking-widest text-stone-300 transition hover:border-amber-400 hover:text-amber-300"
+          >
+            Back
+          </button>
         </div>
         {subtitle && (
           <div className="text-sm text-stone-200 mb-3">
@@ -332,36 +384,82 @@ function D20Icon() {
   )
 }
 
-function TraitModal({ options, onResult, onClose }) {
-  const [traitId, setTraitId] = useState(null)
+function normalizeRollEntries(entries) {
+  return entries.map((entry, index) => {
+    if (typeof entry === "string") {
+      return {
+        roll: index,
+        label: entry,
+        text: entry,
+      }
+    }
+
+    return {
+      roll: index,
+      label: entry.label,
+      text: entry.description ? `${entry.label}: ${entry.description}` : entry.label,
+    }
+  })
+}
+
+function RollTableModal({
+  title,
+  options,
+  entries,
+  onResult,
+  onClose,
+  subtitle,
+  closeOnSelect = false,
+}) {
+  const [activeOptionId, setActiveOptionId] = useState(options ? null : "single")
   const [result, setResult] = useState(null)
   const tableContainerRef = useRef(null)
 
-  const activeTrait = options.find(option => option.id === traitId)
-  const entries = traitId ? SIMPLE_TRAITS[traitId] : []
+  const activeOption = options?.find(option => option.id === activeOptionId) ?? null
+  const activeEntries = normalizeRollEntries(
+    activeOption ? activeOption.entries : entries ?? [],
+  )
 
   useEffect(() => {
-    if (traitId !== "aesthetics" || !result) return
+    if (!result) return
 
     const selectedRow = tableContainerRef.current?.querySelector(
       `[data-roll="${result.roll}"]`,
     )
     selectedRow?.scrollIntoView({ behavior: "smooth", block: "nearest" })
-  }, [result, traitId])
+  }, [result])
 
   function selectResult(index) {
+    const picked = activeEntries[index]
+    if (!picked) return
+
     const nextResult = {
-      category: activeTrait.label,
-      roll: index + 1,
-      text: entries[index],
+      category: activeOption?.label ?? title,
+      roll: picked.roll,
+      text: picked.text,
     }
     setResult(nextResult)
     onResult(nextResult)
+    if (closeOnSelect) {
+      onClose()
+    }
   }
 
-  function selectTrait(nextTraitId) {
-    setTraitId(nextTraitId)
+  function selectOption(nextOptionId) {
+    setActiveOptionId(nextOptionId)
     setResult(null)
+  }
+
+  const canRoll = activeEntries.length > 0
+
+  function handleBack() {
+    if (options && activeOption) {
+      setActiveOptionId(null)
+      setResult(null)
+      return
+    }
+
+    onClose()
   }
 
   return (
@@ -382,46 +480,47 @@ function TraitModal({ options, onResult, onClose }) {
               id="trait-modal-title"
               className="text-md font-black uppercase tracking-widest text-stone-100"
             >
-              {activeTrait ? activeTrait.label : "Choose a Trait"}
+              {activeOption ? activeOption.label : options ? "Choose a Table" : title}
             </h2>
-            {activeTrait && (
+            {canRoll && (
               <div className="flex items-center gap-2">
                 <button
                   type="button"
-                  onClick={() => selectResult(Math.floor(Math.random() * entries.length))}
-                  aria-label={`Roll randomly on the ${activeTrait.label} table`}
+                  onClick={() => selectResult(Math.floor(Math.random() * activeEntries.length))}
+                  aria-label={`Roll randomly on the ${(activeOption?.label ?? title)} table`}
                   title="Roll randomly"
                   className="inline-flex items-center justify-center border border-amber-400/60 bg-amber-400/10 p-2 text-amber-300 transition hover:border-amber-300 hover:bg-amber-400/20 hover:text-amber-200"
                 >
                   <D20Icon />
                 </button>
                 <span className="text-xs uppercase tracking-wide text-stone-300/40">
-                  Roll a random trait
+                  Roll a random result
                 </span>
               </div>
             )}
           </div>
-          {activeTrait && (
-            <button
-              type="button"
-              onClick={() => {
-                setTraitId(null)
-                setResult(null)
-              }}
-              className="border border-stone-700 bg-stone-900 px-4 py-2 text-xs font-black uppercase tracking-widest text-stone-300 transition hover:border-amber-400 hover:text-amber-300"
-            >
-              Back
-            </button>
-          )}
+          <button
+            type="button"
+            onClick={handleBack}
+            className="border border-stone-700 bg-stone-900 px-4 py-2 text-xs font-black uppercase tracking-widest text-stone-300 transition hover:border-amber-400 hover:text-amber-300"
+          >
+            Back
+          </button>
         </div>
 
-        {!activeTrait ? (
+        {subtitle && (
+          <div className="mb-3 text-xl text-stone-200">
+            {subtitle}
+          </div>
+        )}
+
+        {!activeOption && options ? (
           <div className="grid grid-cols-1 gap-2 overflow-y-auto">
             {options.map(option => (
               <button
                 key={option.id}
                 type="button"
-                onClick={() => selectTrait(option.id)}
+                onClick={() => selectOption(option.id)}
                 className="border border-stone-800 bg-black/40 px-4 py-3 text-left text-sm font-bold uppercase tracking-wider text-stone-300 transition hover:border-amber-400 hover:text-amber-300"
               >
                 {option.label}
@@ -436,22 +535,23 @@ function TraitModal({ options, onResult, onClose }) {
             >
               <table className="w-full border-collapse text-left text-sm">
                 <tbody>
-                  {entries.map((entry, index) => (
+                  {activeEntries.map((entry, index) => (
                     <tr
-                      key={entry}
-                      data-roll={index + 1}
+                      key={`${entry.roll}-${entry.label}`}
+                      data-roll={entry.roll}
+                      onClick={() => selectResult(index)}
                       className={cx(
-                        "border-b border-stone-800 last:border-b-0",
-                        result?.roll === index + 1
+                        "cursor-pointer border-b border-stone-800 last:border-b-0",
+                        result?.roll === entry.roll
                           ? "bg-amber-400/15 text-amber-200"
                           : "bg-black/30",
                       )}
                     >
                       <td className="w-14 border-r border-stone-800 px-3 py-2 text-center font-black text-amber-300/80">
-                        {index + 1}
+                        {entry.roll}
                       </td>
                       <td className="px-4 py-2">
-                        {entry}
+                        {entry.label}
                       </td>
                     </tr>
                   ))}
@@ -468,8 +568,10 @@ function TraitModal({ options, onResult, onClose }) {
 export default function App() {
   const relationshipResult = useFadeSwap(null)
   const traitsResult = useFadeSwap(null)
+  const crimeResult = useFadeSwap(null)
+  const illnessResult = useFadeSwap(null)
 
-  const [activeModal, setActiveModal] = useState(null) // 'relationship' | 'traits' | 'links' | null
+  const [activeModal, setActiveModal] = useState(null) // 'relationship' | 'traits' | 'crime' | 'illness' | 'links' | null
 
   function handleSelectRelationship(categoryId) {
     const relationshipRoll = String(rollD10Digit())
@@ -487,18 +589,32 @@ export default function App() {
     })
   }
 
+  function handleSelectCrime(result) {
+    crimeResult.swap({
+      category: result.category,
+      text: `[${result.roll}] ${result.text}`,
+    })
+  }
+
+  function handleSelectIllness(result) {
+    illnessResult.swap({
+      category: result.category,
+      text: `[${result.roll}] ${result.text}`,
+    })
+  }
+
   // Formatting options for Modals
   const relationshipOptions = Object.entries(RELATIONSHIPS.categories).map(
     ([id, label]) => ({ id, label: `${id}. ${label}` }),
   )
   const traitOptions = [
-    { id: "aesthetics", label: "Aesthetics" },
-    { id: "physique", label: "Physique" },
-    { id: "face", label: "Face" },
-    { id: "speech", label: "Speech" },
-    { id: "virtue", label: "Virtue" },
-    { id: "ideology", label: "Ideology" },
-    { id: "misfortune", label: "Misfortune" },
+    { id: "aesthetics", label: "Aesthetics", entries: SIMPLE_TRAITS.aesthetics },
+    { id: "physique", label: "Physique", entries: SIMPLE_TRAITS.physique },
+    { id: "face", label: "Face", entries: SIMPLE_TRAITS.face },
+    { id: "speech", label: "Speech", entries: SIMPLE_TRAITS.speech },
+    { id: "virtue", label: "Virtue", entries: SIMPLE_TRAITS.virtue },
+    { id: "ideology", label: "Ideology", entries: SIMPLE_TRAITS.ideology },
+    { id: "misfortune", label: "Misfortune", entries: SIMPLE_TRAITS.misfortune },
   ]
   const linkOptions = [
     {
@@ -511,7 +627,7 @@ export default function App() {
       label: "Spotify - for the Session",
       href: "https://open.spotify.com/playlist/4f3s6cgJq1XBTIx5SPCg0A",
     },
-    { id: "itch", label: "Oubliette", href: "https://codabool.itch.io" },
+    { id: "itch", label: "Oubliette", href: "https://codabool.itch.io/oubliette" },
     {
       id: "relationships-by-eddie-dover",
       label: "Relationship Rolltable by Eddie Dover",
@@ -522,17 +638,17 @@ export default function App() {
 
   return (
     <main className="relative flex min-h-dvh flex-col overflow-hidden bg-stone-950 font-sans text-stone-100">
-      <section className="relative z-10 grid flex-1 grid-cols-1 gap-8 px-6 py-8 sm:grid-cols-2">
+      <section className="relative z-10 grid flex-1 grid-cols-1 auto-rows-fr gap-2 px-6 py-3 md:gap-8 md:py-8 sm:grid-cols-2">
         <Quadrant>
           <button
             type="button"
             onClick={() => setActiveModal("relationship")}
-            className="w-full border border-stone-700 bg-stone-900 py-3 text-sm font-black uppercase tracking-widest transition hover:border-amber-400 hover:text-amber-300"
+            className="w-full border border-stone-700 bg-stone-900 py-1 text-sm font-black uppercase tracking-widest transition hover:border-amber-400 hover:text-amber-300 lg:py-2 lg:text-base"
           >
             Relationship
           </button>
 
-          <ResultBlock className="relative h-40 items-start overflow-hidden">
+          <ResultBlock className="relative flex-1 min-h-0 items-start overflow-hidden">
             <FadeText show={relationshipResult.visible}>
               {relationshipResult.hasValue ? (
                 <div className="w-full">
@@ -554,12 +670,12 @@ export default function App() {
           <button
             type="button"
             onClick={() => setActiveModal("traits")}
-            className="w-full border border-stone-700 bg-stone-900 py-3 text-sm font-black uppercase tracking-widest transition hover:border-amber-400 hover:text-amber-300"
+            className="w-full border border-stone-700 bg-stone-900 py-1 text-sm font-black uppercase tracking-widest transition hover:border-amber-400 hover:text-amber-300 lg:py-2 lg:text-base"
           >
             Traits
           </button>
 
-          <ResultBlock className="relative h-40 items-start overflow-hidden">
+          <ResultBlock className="relative flex-1 min-h-0 items-start overflow-hidden">
             <FadeText show={traitsResult.visible}>
               {traitsResult.hasValue ? (
                 <div className="w-full">
@@ -576,13 +692,67 @@ export default function App() {
             </FadeText>
           </ResultBlock>
         </Quadrant>
+
+        <Quadrant>
+          <button
+            type="button"
+            onClick={() => setActiveModal("crime")}
+            className="w-full border border-stone-700 bg-stone-900 py-1 text-sm font-black uppercase tracking-widest transition hover:border-amber-400 hover:text-amber-300 lg:py-2 lg:text-base"
+          >
+            Crime
+          </button>
+
+          <ResultBlock className="relative flex-1 min-h-0 items-start overflow-hidden">
+            <FadeText show={crimeResult.visible}>
+              {crimeResult.hasValue ? (
+                <div className="w-full">
+                  <p className="text-[0.7rem] font-black uppercase tracking-[0.18em] text-amber-300/80">
+                    {crimeResult.value.category}
+                  </p>
+                  <p className="mt-2 text-sm font-bold leading-6 text-stone-100 md:text-base">
+                    {crimeResult.value.text}
+                  </p>
+                </div>
+              ) : (
+                <p className="text-sm text-stone-500">Awaiting selection...</p>
+              )}
+            </FadeText>
+          </ResultBlock>
+        </Quadrant>
+
+        <Quadrant>
+          <button
+            type="button"
+            onClick={() => setActiveModal("illness")}
+            className="w-full border border-stone-700 bg-stone-900 py-1 text-sm font-black uppercase tracking-widest transition hover:border-amber-400 hover:text-amber-300 lg:py-2 lg:text-base"
+          >
+            Mental Illness
+          </button>
+
+          <ResultBlock className="relative flex-1 min-h-0 items-start overflow-hidden">
+            <FadeText show={illnessResult.visible}>
+              {illnessResult.hasValue ? (
+                <div className="w-full">
+                  <p className="text-[0.7rem] font-black uppercase tracking-[0.18em] text-amber-300/80">
+                    {illnessResult.value.category}
+                  </p>
+                  <p className="mt-2 text-xs font-bold leading-6 text-stone-100 sm:text-sm md:text-base">
+                    {illnessResult.value.text}
+                  </p>
+                </div>
+              ) : (
+                <p className="text-sm text-stone-500">Awaiting selection...</p>
+              )}
+            </FadeText>
+          </ResultBlock>
+        </Quadrant>
       </section>
 
-      <div className="relative z-10 px-6 pb-8">
+      <div className="relative z-10 px-6 pb-4">
         <button
           type="button"
           onClick={() => setActiveModal("links")}
-          className="w-full border border-stone-700 bg-stone-900 py-3 text-sm font-black uppercase tracking-widest transition hover:border-amber-400 hover:text-amber-300"
+          className="w-full border border-stone-700 bg-stone-900 py-3 text-sm font-black uppercase tracking-widest transition hover:border-amber-400 hover:text-amber-300 lg:py-4 lg:text-base"
         >
           Links
         </button>
@@ -609,10 +779,33 @@ export default function App() {
       )}
 
       {activeModal === "traits" && (
-        <TraitModal
+        <RollTableModal
+          title="Traits"
           options={traitOptions}
           onResult={handleSelectTrait}
           onClose={() => setActiveModal(null)}
+        />
+      )}
+
+      {activeModal === "crime" && (
+        <RollTableModal
+          title="Crime"
+          entries={CRIME_TABLE}
+          subtitle="All players have already been found guilty and sentenced for a crime. Have your players roll a d20 for years left in their sentence"
+          onResult={handleSelectCrime}
+          onClose={() => setActiveModal(null)}
+          closeOnSelect
+        />
+      )}
+
+      {activeModal === "illness" && (
+        <RollTableModal
+          title="Mental Illness"
+          entries={ILLNESS_TABLE}
+          subtitle="All players suffer a mental illness. While they’re no longer compelled by it, intrusive thoughts may linger."
+          onResult={handleSelectIllness}
+          onClose={() => setActiveModal(null)}
+          closeOnSelect
         />
       )}
 
@@ -630,8 +823,8 @@ export default function App() {
 
 function Quadrant({ children }) {
   return (
-    <article className="relative flex flex-col justify-center border border-stone-800 bg-stone-950/90 p-5 shadow-[0_8px_30px_rgba(0,0,0,0.35)]">
-      <div className="flex min-h-0 flex-1 flex-col justify-start gap-4">
+    <article className="relative flex h-full min-h-0 flex-col justify-center border border-stone-800 bg-stone-950/90 p-0 shadow-[0_8px_30px_rgba(0,0,0,0.35)] md:p-5">
+      <div className="flex min-h-0 flex-1 flex-col justify-start md:gap-4 gap-0">
         {children}
       </div>
     </article>
@@ -642,7 +835,7 @@ function ResultBlock({ children, muted = false, className = "" }) {
   return (
     <div
       className={cx(
-        "flex flex-col border border-stone-800 bg-black/35 p-4 text-sm leading-6",
+        "flex min-h-0 flex-col border border-stone-800 bg-black/35 p-4 text-sm leading-6",
         muted && "text-stone-600",
         className,
       )}
