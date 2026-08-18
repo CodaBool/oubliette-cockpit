@@ -226,14 +226,14 @@ const CRIME_TABLE = [
 ]
 
 const ILLNESS_TABLE = [
-  { label: "PTSD", description: "Persistent trauma responses from past events." },
-  { label: "Egomania", description: "Delusions of grandeur, events are proof they are uniquely important." },
-  { label: "Obsessive", description: "A goal is slowly consuming every part of their identity." },
-  { label: "Hieromania", description: "They receive religious signs, visions, and commandments." },
-  { label: "Compulsive", description: "They must repeat a particular action to feel safe." },
+  { label: "PTSD", description: "Post Traumatic Stress Disorder: Persistent trauma responses from past events." },
+  { label: "Egomania", description: "Delusions of grandeur, events are proof you're uniquely important." },
+  { label: "Obsessive", description: "A goal is slowly consuming every part of your identity." },
+  { label: "Hieromania", description: "You receive religious signs, visions, and commandments." },
+  { label: "Compulsive", description: "You must repeat a particular action to feel safe." },
   {
     label: "Excoriation",
-    description: "non-stop skin picking.",
+    description: "Non-stop skin picking.",
   },
   {
     label: "Stendhal Syndrome",
@@ -246,11 +246,11 @@ const ILLNESS_TABLE = [
   {
     label: "Capgras syndrome",
     description:
-      "The conviction that a close family member, friend, or spouse has been replaced by an identical imposter.",
+      "You were convinced that a close family member, friend, or spouse was replaced by an identical imposter.",
   },
   {
     label: "Depersonalized",
-    description: "Feeling perpetually detached from one's own physical body.",
+    description: "Feeling strongly detached from one's own physical body.",
   },
 ]
 
@@ -312,17 +312,17 @@ function SelectionModal({
       onMouseDown={onClose}
     >
       <section
-        className="flex max-h-[90dvh] w-full max-w-lg flex-col border border-stone-800 bg-stone-950 p-6 shadow-2xl"
+        className="themed-modal-panel flex max-h-[90dvh] w-full max-w-lg flex-col p-6 shadow-2xl"
         onMouseDown={e => e.stopPropagation()}
       >
-        <div className="mb-3 flex items-center justify-between border-b border-stone-800 pb-3">
-          <h2 className="text-md font-black uppercase tracking-widest text-stone-100">
+        <div className="mb-3 flex items-center justify-between border-b border-stone-700 pb-3">
+          <h2 className="text-md font-black uppercase text-stone-100 tracking-wider">
             {title}
           </h2>
           <button
             type="button"
             onClick={onClose}
-            className="border border-stone-700 bg-stone-900 px-4 py-2 text-xs font-black uppercase tracking-widest text-stone-300 transition hover:border-amber-400 hover:text-amber-300"
+            className="action-btn-modal"
           >
             Back
           </button>
@@ -340,7 +340,7 @@ function SelectionModal({
                 href={opt.href}
                 target="_blank"
                 rel="noreferrer"
-                className="border border-stone-800 bg-black/40 px-4 py-3 text-left text-sm font-bold uppercase tracking-wider text-stone-300 transition hover:border-amber-400 hover:text-amber-300"
+                className="modal-option-btn"
               >
                 {opt.label}
               </a>
@@ -349,7 +349,7 @@ function SelectionModal({
                 key={opt.id}
                 type="button"
                 onClick={() => onSelect?.(opt.id)}
-                className="border border-stone-800 bg-black/40 px-4 py-3 text-left text-sm font-bold uppercase tracking-wider text-stone-300 transition hover:border-amber-400 hover:text-amber-300"
+                className="modal-option-btn"
               >
                 {opt.label}
               </button>
@@ -471,16 +471,16 @@ function RollTableModal({
       onMouseDown={onClose}
     >
       <section
-        className="flex max-h-[90dvh] w-full max-w-2xl flex-col border border-stone-800 bg-stone-950 p-6 shadow-2xl"
+        className="themed-modal-panel flex max-h-[90dvh] w-full max-w-2xl flex-col p-6 shadow-2xl"
         onMouseDown={event => event.stopPropagation()}
       >
-        <div className="mb-3 flex items-center justify-between border-b border-stone-800 pb-3">
+        <div className="mb-3 flex items-center justify-between border-b border-stone-700 pb-3">
           <div className="flex items-center gap-3">
             <h2
               id="trait-modal-title"
-              className="text-md font-black uppercase tracking-widest text-stone-100"
+              className="text-md font-black uppercase text-stone-100"
             >
-              {activeOption ? activeOption.label : options ? "Choose a Table" : title}
+              {activeOption ? activeOption.label : options ? "Traits" : title}
             </h2>
             {canRoll && (
               <div className="flex items-center gap-2">
@@ -489,11 +489,11 @@ function RollTableModal({
                   onClick={() => selectResult(Math.floor(Math.random() * activeEntries.length))}
                   aria-label={`Roll randomly on the ${(activeOption?.label ?? title)} table`}
                   title="Roll randomly"
-                  className="inline-flex items-center justify-center border border-amber-400/60 bg-amber-400/10 p-2 text-amber-300 transition hover:border-amber-300 hover:bg-amber-400/20 hover:text-amber-200"
+                  className="dice-btn inline-flex items-center justify-center p-2 transition"
                 >
                   <D20Icon />
                 </button>
-                <span className="text-xs uppercase tracking-wide text-stone-300/40">
+                <span className="text-xs uppercase tracking-wide text-stone-400">
                   Roll a random result
                 </span>
               </div>
@@ -502,7 +502,7 @@ function RollTableModal({
           <button
             type="button"
             onClick={handleBack}
-            className="border border-stone-700 bg-stone-900 px-4 py-2 text-xs font-black uppercase tracking-widest text-stone-300 transition hover:border-amber-400 hover:text-amber-300"
+            className="action-btn-modal"
           >
             Back
           </button>
@@ -521,7 +521,7 @@ function RollTableModal({
                 key={option.id}
                 type="button"
                 onClick={() => selectOption(option.id)}
-                className="border border-stone-800 bg-black/40 px-4 py-3 text-left text-sm font-bold uppercase tracking-wider text-stone-300 transition hover:border-amber-400 hover:text-amber-300"
+                className="modal-option-btn"
               >
                 {option.label}
               </button>
@@ -543,11 +543,11 @@ function RollTableModal({
                       className={cx(
                         "cursor-pointer border-b border-stone-800 last:border-b-0",
                         result?.roll === entry.roll
-                          ? "bg-amber-400/15 text-amber-200"
-                          : "bg-black/30",
+                          ? "bg-white/15 text-stone-100"
+                          : "bg-black/30 hover:bg-white/8",
                       )}
                     >
-                      <td className="w-14 border-r border-stone-800 px-3 py-2 text-center font-black text-amber-300/80">
+                      <td className="w-14 border-r border-stone-800 px-3 py-2 text-center font-black text-stone-300">
                         {entry.roll}
                       </td>
                       <td className="px-4 py-2">
@@ -637,13 +637,13 @@ export default function App() {
   ]
 
   return (
-    <main className="relative flex min-h-dvh flex-col overflow-hidden bg-stone-950 font-sans text-stone-100">
+    <main className="app-shell relative flex min-h-dvh flex-col overflow-hidden font-sans text-stone-100">
       <section className="relative z-10 grid flex-1 grid-cols-1 auto-rows-fr gap-2 px-6 py-3 md:gap-8 md:py-8 sm:grid-cols-2">
         <Quadrant>
           <button
             type="button"
             onClick={() => setActiveModal("relationship")}
-            className="w-full border border-stone-700 bg-stone-900 py-1 text-sm font-black uppercase tracking-widest transition hover:border-amber-400 hover:text-amber-300 lg:py-2 lg:text-base"
+            className="action-btn w-full py-1 text-sm font-black uppercase lg:py-2 lg:text-base"
           >
             Relationship
           </button>
@@ -652,7 +652,7 @@ export default function App() {
             <FadeText show={relationshipResult.visible}>
               {relationshipResult.hasValue ? (
                 <div className="w-full">
-                  <p className="text-[0.7rem] font-black uppercase tracking-[0.18em] text-amber-300/80">
+                  <p className="text-[0.78rem] font-black uppercase tracking-[0.18em] text-stone-300 md:text-sm lg:text-xl">
                     {relationshipResult.value.category}
                   </p>
                   <p className="mt-2 text-sm font-bold leading-6 text-stone-100 md:text-base lg:text-xl lg:leading-8">
@@ -670,7 +670,7 @@ export default function App() {
           <button
             type="button"
             onClick={() => setActiveModal("traits")}
-            className="w-full border border-stone-700 bg-stone-900 py-1 text-sm font-black uppercase tracking-widest transition hover:border-amber-400 hover:text-amber-300 lg:py-2 lg:text-base"
+            className="action-btn w-full py-1 text-sm font-black uppercase lg:py-2 lg:text-base"
           >
             Traits
           </button>
@@ -679,7 +679,7 @@ export default function App() {
             <FadeText show={traitsResult.visible}>
               {traitsResult.hasValue ? (
                 <div className="w-full">
-                  <p className="text-[0.7rem] font-black uppercase tracking-[0.18em] text-amber-300/80">
+                  <p className="text-[0.78rem] font-black uppercase tracking-[0.18em] text-stone-300 md:text-sm lg:text-xl">
                     {traitsResult.value.category}
                   </p>
                   <p className="mt-2 text-sm font-bold leading-6 text-stone-100 md:text-base lg:text-xl lg:leading-8">
@@ -697,7 +697,7 @@ export default function App() {
           <button
             type="button"
             onClick={() => setActiveModal("crime")}
-            className="w-full border border-stone-700 bg-stone-900 py-1 text-sm font-black uppercase tracking-widest transition hover:border-amber-400 hover:text-amber-300 lg:py-2 lg:text-base"
+            className="action-btn w-full py-1 text-sm font-black uppercase lg:py-2 lg:text-base"
           >
             Crime
           </button>
@@ -721,7 +721,7 @@ export default function App() {
           <button
             type="button"
             onClick={() => setActiveModal("illness")}
-            className="w-full border border-stone-700 bg-stone-900 py-1 text-sm font-black uppercase tracking-widest transition hover:border-amber-400 hover:text-amber-300 lg:py-2 lg:text-base"
+            className="action-btn w-full py-1 text-sm font-black uppercase lg:py-2 lg:text-base"
           >
             Mental Illness
           </button>
@@ -746,7 +746,7 @@ export default function App() {
         <button
           type="button"
           onClick={() => setActiveModal("links")}
-          className="w-full border border-stone-700 bg-stone-900 py-3 text-sm font-black uppercase tracking-widest transition hover:border-amber-400 hover:text-amber-300 lg:py-4 lg:text-base"
+          className="action-btn w-full py-3 text-sm font-black uppercase lg:py-4 lg:text-base"
         >
           Links
         </button>
@@ -817,7 +817,7 @@ export default function App() {
 
 function Quadrant({ children }) {
   return (
-    <article className="relative flex h-full min-h-0 flex-col justify-center border border-stone-800 bg-stone-950/90 p-0 shadow-[0_8px_30px_rgba(0,0,0,0.35)] md:p-5">
+    <article className="quadrant-shell relative flex h-full min-h-0 flex-col justify-center p-0 shadow-[0_8px_30px_rgba(0,0,0,0.6)] md:p-5">
       <div className="flex min-h-0 flex-1 flex-col justify-start md:gap-4 gap-0">
         {children}
       </div>
@@ -829,7 +829,7 @@ function ResultBlock({ children, muted = false, className = "" }) {
   return (
     <div
       className={cx(
-        "flex min-h-0 flex-col border border-stone-800 bg-black/35 p-4 text-sm leading-6",
+        "result-block flex min-h-0 flex-col border border-stone-700 bg-black p-4 text-sm leading-6",
         muted && "text-stone-600",
         className,
       )}
