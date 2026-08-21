@@ -620,12 +620,12 @@ export default function App() {
     {
       id: "facilitator-playlist",
       label: "Spotify - for Facilitator Prep",
-      href: "https://open.spotify.com/playlist/4f3s6cgJq1XBTIx5SPCg0A",
+      href: "https://open.spotify.com/playlist/12F4X7VzgLPt3Ef7JIBmy8",
     },
     {
       id: "session-playlist",
       label: "Spotify - for the Session",
-      href: "https://open.spotify.com/playlist/4f3s6cgJq1XBTIx5SPCg0A",
+      href: "https://open.spotify.com/playlist/6dC7ZRObjCE2VHKZwFh9CQ",
     },
     { id: "itch", label: "Oubliette", href: "https://codabool.itch.io/oubliette" },
     {
