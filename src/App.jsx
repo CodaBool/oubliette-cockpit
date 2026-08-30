@@ -210,7 +210,9 @@ const SIMPLE_TRAITS = {
 }
 
 const CRIME_TABLE = [
-  { label: "metaphysical fraud" },
+  { label: "metaphysical fraud",
+    description: "selling fake spiritual services or products, or claiming to have supernatural powers",
+  },
   { label: "theft" },
   { label: "stalking" },
   { label: "blackmail" },
@@ -633,7 +635,6 @@ export default function App() {
       label: "Relationship Rolltable by Eddie Dover",
       href: "https://github.com/EddieDover/mothership-crew-relationships",
     },
-    { id: "artist", label: "Portraits were by Francisco Lemos", href: "https://lemos.itch.io" },
   ]
 
   return (
