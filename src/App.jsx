@@ -759,6 +759,8 @@ export default function App() {
           title="Relationships"
           options={relationshipOptions}
           subtitle={(
+            <>
+            <p style={{textAlign: "center", marginBottom: "1.8em", fontSize: "1.3em"}}><b>This generator is not recommended for one-shots</b></p>
             <ol className=" list-decimal space-y-2 pl-6  marker:text-gray-300 text-[1.2em] mb-3">
               <li>Have everyone intro their role and roll a d8</li>
               <li>Come back around and one at a time tell them what category they rolled (allow rerolls)</li>
@@ -766,6 +768,7 @@ export default function App() {
               <li>Read the description after clicking the category</li>
               <li>Ask them to fill in any blanks</li>
             </ol>
+            </>
           )}
           // subtitle="1.) Have everyone intro their roles and roll a d8. 2.) Come back around and one at a time tell them the rolled category (allow rerolls). 3.) Ask them to select someone at the table to have this relation with. 4.) Read the description after clicking the category. 5.) Ask them to fill in any blanks."
           onSelect={handleSelectRelationship}
