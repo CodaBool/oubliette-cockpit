@@ -760,7 +760,7 @@ export default function App() {
           options={relationshipOptions}
           subtitle={(
             <>
-            <p style={{textAlign: "center", marginBottom: "1.8em", fontSize: "1.3em"}}><b>This generator is not recommended for one-shots</b></p>
+            <p style={{textAlign: "center", marginBottom: "1.8em", fontSize: "1.3em"}}><b>Only recommended if there are 3 or less players</b></p>
             <ol className=" list-decimal space-y-2 pl-6  marker:text-gray-300 text-[1.2em] mb-3">
               <li>Have everyone intro their role and roll a d8</li>
               <li>Come back around and one at a time tell them what category they rolled (allow rerolls)</li>
