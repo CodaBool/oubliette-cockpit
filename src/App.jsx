@@ -789,7 +789,15 @@ export default function App() {
         <RollTableModal
           title="Crime"
           entries={CRIME_TABLE}
-          subtitle="All players have already been found guilty and sentenced for a crime. Have your players roll a d20 for years left in their sentence"
+          subtitle={(
+            <>
+              <p style={{textAlign: "center", marginBottom: "0.2em", fontSize: "1.0em", opacity: 0.72}}><b>Roll for this when the rorschach is presented.</b></p>
+              <p style={{textAlign: "", marginBottom: "0.6em", fontSize: "1.0em", opacity: 0.6}}>Some players will come up with their own crime. In the spirit of 'yes and', don't roll and instead work off their idea.</p>
+              <p style={{textAlign: "", marginBottom: "0.6em", fontSize: "1.0em", opacity: 0.6}}>The functionality to roll here is available. But players like rolling, have them roll a d10 and read off the result.</p>
+              <p>All players have already been found guilty. In addition, have your players roll a d20 for years left in their sentence</p>
+            </>
+          )}
+
           onResult={handleSelectCrime}
           onClose={() => setActiveModal(null)}
           closeOnSelect
